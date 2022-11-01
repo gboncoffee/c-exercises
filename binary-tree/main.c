@@ -1,0 +1,109 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<errno.h>
+
+/*
+ * binary tree exercise from https://youtu.be/9GdesxWtOgs (Fábio Akita)
+ */
+
+typedef struct Node {
+
+    int data;
+
+    struct Node* right;
+    struct Node* left;
+
+} Node;
+
+Node *insert(Node *root, int data) {
+    Node *temp = (Node*) malloc(sizeof(Node));
+
+    temp->data = data;
+    temp->left = NULL;
+    temp->right = NULL;
+
+    if (root == NULL) {
+        root = temp;
+
+    } else {
+        Node *current = root;
+        Node *parent = NULL;
+        for (;;) {
+            parent = current;
+
+            if (data < parent->data) {
+                current = current->left;
+
+                if (current == NULL) {
+                    parent->left = temp;
+                    return (root);
+                }
+
+            } else {
+                current = current->right;
+
+                if (current == NULL) {
+                    parent->right = temp;
+                    return (root);
+                }
+            }
+        }
+    }
+
+    return(root);
+}
+
+void inorder_traversal(Node *root) {
+    if (root) {
+        inorder_traversal(root->left);
+        printf("%d ", root->data);
+        inorder_traversal(root->right);
+    }
+}
+
+Node *search(Node *root, int data) {
+    Node *current = root;
+    printf("Visiting elements: ");
+
+    while (current) {
+        printf("%d ", current->data);
+
+        if (data < current->data) {
+            current = current->left;
+
+        } else if (data > current->data) {
+            current = current->right;
+
+        } else {
+            return (current);
+        }
+    }
+    
+    return (NULL);
+}
+
+int main(int argv, char *argc[]) {
+
+    int i;
+    int array[] = { 34, 84, 15, 0, 2, 99, 79, 9, 88, 89, 18, 31, 39, 100, 101 };
+
+    Node *root = NULL;
+
+    for (i = 0; i < 15; i++) {
+        root = insert(root, array[i]);
+        printf("Inserted: %d\n", array[i]);
+    }
+
+    printf("In order traversal: \n");
+    inorder_traversal(root);
+    putchar('\n');
+
+    Node *temp = search(root, 200);
+    if (temp) {
+        printf("%d found\n", temp->data);
+    } else {
+        printf("%d not found\n", i);
+    }
+
+    return(errno);
+}
