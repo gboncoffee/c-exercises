@@ -8,4 +8,4 @@ main : $(CFILES)
 .PHONY : test
 
 test : main
-	echo -e "3x3\n1 1 0\n2 1 -1\n3 -2 2\n5 6 7\n" | ./main
+	echo -e "3 3\n1 1 0\n2 1 -1\n3 -2 2\n5 6 7\n" | ./main

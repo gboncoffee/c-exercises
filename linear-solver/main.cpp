@@ -1,27 +1,35 @@
 #include <iostream>
 #include <vector>
-#include <stdio.h>
-#include <cassert>
 
 using namespace std;
 using matrix = vector<vector<double>>;
 
+void multiply_sum_lines(vector<double> *p, vector<double> *l, unsigned long start)
+{
+	double fact = (*p)[start] / (*l)[start];
+	for (unsigned long i = start; i < (*p).size(); i++) {
+		(*l)[i] *= -fact;
+		(*l)[i] += (*p)[i];
+	}
+}
+
 int solve(matrix *s)
 {
-	// TODO
+	for (unsigned long i = 0; i < (*s).size() - 1; i++)
+		for (unsigned long j = (i + 1); j < (*s).size(); j++)
+			multiply_sum_lines(&(*s)[i], &(*s)[j], i);
 
-	return 1;
+	// TODO: Use result from Gauss' Elimination to get the solution of the
+	// system.
+
+	return 0;
 }
 
 void read_system(matrix *m)
 {
-	for (unsigned long i = 0; i < m->size(); i++) {
-		cout << "Enter " << i + 1 << " line: " << flush;
+	for (unsigned long i = 0; i < m->size(); i++)
 		for (unsigned long j = 0; j < (*m)[0].size() - 1; j++)
 			cin >> (*m)[i][j];
-	}
-
-	cout << "Enter right side: " << flush;
 
 	for (unsigned long i = 0; i < m->size(); i++)
 		cin >> (*m)[i][(*m)[0].size() - 1];
@@ -62,13 +70,7 @@ void print_sol(matrix *sol)
 int main(void)
 {
 	int m, n;
-	cout << "Enter the size of the system (e.g., 3x3, 4x5, etc): " << flush;
-	while (scanf("%dx%d", &m, &n) != 2);
-
-	if ((!m) || (!n)) {
-		cerr << "No system can have 0 on size!" << endl;
-		return 1;
-	}
+	cin >> m >> n;
 
 	matrix s(m, vector<double>(n + 1));
 	read_system(&s);
@@ -83,9 +85,9 @@ int main(void)
 		cout << "Infinite solutions" << endl;
 		break;
 	case 0:
-		cout << "Solution: ";
+		cout << endl;
 		print_matrix(&sol);
-		print_sol(&sol);
+		// print_sol(&sol);
 		break;
 	case 1:
 		cout << "No solutions" << endl;
